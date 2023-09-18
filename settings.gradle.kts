@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AndroidLab1"
+rootProject.name = "AndroidLab2"
 include(":app")
 
