@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AndroidLab1</string>
+    <string name="hello_message">Look at my GUI</string>
+    <string name="ButtonText">Click here</string>
+    <string name="checkBoxText">Check this out!</string>
+    <string name="textInput">Type here</string>
+    <string name="toast_message">Here is more information”, </string>
+
+
+</resources>
