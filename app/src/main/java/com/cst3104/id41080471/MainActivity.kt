@@ -10,9 +10,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_linear)
 
-        val toast_message = findViewById(R.id.button3) as Button
-        toast_message.setOnClickListener {
-            Toast.makeText(this@MainActivity, "@strings/toast_message", Toast.LENGTH_LONG).show()
+        val toastmessage = findViewById<Button>(R.id.button3)
+        toastmessage.setOnClickListener {
+            Toast.makeText(this@MainActivity, R.string.toast_message, Toast.LENGTH_LONG).show()
         }
     }
 

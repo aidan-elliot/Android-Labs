@@ -4,7 +4,9 @@
     <string name="ButtonText">Click here</string>
     <string name="checkBoxText">Check this out!</string>
     <string name="textInput">Type here</string>
-    <string name="toast_message">Here is more information”, </string>
+    <string name="toast_message">Here is more information</string>
+    <string name="checkBox">Check box</string>
+    <string name="switchText">Switch</string>
 
 
 

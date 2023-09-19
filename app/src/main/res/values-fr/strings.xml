@@ -6,4 +6,6 @@
     <string name="checkBoxText">Regarde ça!</string>
     <string name="textInput">Écrivez ici</string>
     <string name="toast_message">Voici plus d\'informations</string>
+    <string name="checkBox">Case à cocher</string>
+    <string name="switchText">Interrupteur</string>
 </resources>
