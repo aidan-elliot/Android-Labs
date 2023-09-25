@@ -20,17 +20,22 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
         val switch = findViewById<Switch>(R.id.switch1)
-
         switch.setOnCheckedChangeListener { _, isChecked ->
-            val message = "${R.string.switchState} ${if (isChecked) R.string.On else R.string.Off}"
-            showSnackbar(message)
+            val switchState = getString(R.string.switchState)
+            val switchstatus = if (isChecked) getString(R.string.On) else getString(R.string.Off)
+            val message = "$switchState $switchstatus"
+            showSnackbar(message, switch)
         }
     }
-    private fun showSnackbar(message: String) {
+    private fun showSnackbar(message: String, switch: Switch) {
         val snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
-        snackbar.setAction(R.string.undoString, View.OnClickListener {
-
-        })
+        snackbar.setAction(R.string.undoString) {
+            if (switch.isChecked){
+                switch.isChecked = false
+            } else{
+                switch.isChecked = true
+            }
+        }
         snackbar.show()
     }
 
