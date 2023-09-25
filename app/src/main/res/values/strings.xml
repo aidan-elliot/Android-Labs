@@ -7,7 +7,10 @@
     <string name="toast_message">Here is more information</string>
     <string name="checkBox">Check box</string>
     <string name="switchText">Switch</string>
-
+    <string name="undoString">Undo</string>
+    <string name="switchState">The switch is now </string>
+    <string name="On">on</string>
+    <string name="Off">off</string>
 
 
 </resources>

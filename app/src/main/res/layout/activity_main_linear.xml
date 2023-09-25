@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:layout_gravity="fill"
         android:paddingLeft="10dp"
         android:layout_width="366dp"
         android:layout_height="wrap_content"
@@ -17,16 +18,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill"
         android:orientation="horizontal"
         android:paddingLeft="10dp">
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="295dp"
+            android:layout_width="328dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="fill"
             android:layout_weight="1"
-            android:text="@string/ButtonText"
-            android:onClick="displayToastMsg"/>
+            android:onClick="displayToastMsg"
+            android:text="@string/ButtonText" />
 
         <LinearLayout
             android:layout_marginLeft="10dp"
@@ -39,6 +42,7 @@
                 android:id="@+id/checkBox4"
                 android:layout_width="196dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="fill"
                 android:layout_weight="1"
                 android:text="@string/checkBox" />
         </LinearLayout>
@@ -52,8 +56,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="295dp"
-            android:layout_height="77dp"
+            android:layout_width="328dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill"
             android:layout_weight="1"
             app:srcCompat="@drawable/flag" />
 
@@ -68,6 +73,7 @@
                 android:id="@+id/switch1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="fill"
                 android:layout_weight="1"
                 android:text="@string/switchText" />
         </LinearLayout>
@@ -78,6 +84,7 @@
         android:id="@+id/editTextText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill"
         android:ems="10"
         android:inputType="textPersonName|textCapWords"
         android:hint="@string/textInput" />
