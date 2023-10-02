@@ -1,16 +1,9 @@
 <resources>
-    <string name="app_name">AndroidLab2</string>
-    <string name="hello_message">Look at my GUI</string>
-    <string name="ButtonText">Click here</string>
-    <string name="checkBoxText">Check this out!</string>
-    <string name="textInput">Type here</string>
-    <string name="toast_message">Here is more information</string>
-    <string name="checkBox">Check box</string>
-    <string name="switchText">Switch</string>
-    <string name="undoString">Undo</string>
-    <string name="switchState">The switch is now </string>
-    <string name="On">on</string>
-    <string name="Off">off</string>
+    <string name="app_name">AndroidLab3</string>
+    <string name="spin_message">Spin flag</string>
+    <string name="button1">Button 1</string>
+    <string name="button2">Button 2</string>
+    <string name="button3">Button 3</string>
 
 
 </resources>
