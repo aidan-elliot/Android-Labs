@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AndroidLab3</string>
+    <string name="spin_message">Flagge drehen</string>
+    <string name="button1">Taste 1</string>
+    <string name="button2">"Taste 2 "</string>
+    <string name="button3">Taste 3</string>
+
+
+</resources>
