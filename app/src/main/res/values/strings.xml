@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">AndroidLab3</string>
-    <string name="spin_message">Spin flag</string>
-    <string name="button1">Button 1</string>
-    <string name="button2">Button 2</string>
-    <string name="button3">Button 3</string>
+    <string name="textView2">Enter your email address:</string>
+    <string name="editTextTextEmailAddress">Type email here</string>
+    <string name="textView3">Type your password:</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="callbutton">Call Number</string>
+    <string name="changepicbutton">Change Picture</string>
+    <string name="loginbutton">LOGIN</string>
 
 
 </resources>
