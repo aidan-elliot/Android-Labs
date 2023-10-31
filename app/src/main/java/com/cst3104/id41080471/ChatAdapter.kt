@@ -24,13 +24,12 @@ class ChatAdapter(private val context: Context, private val messages: MutableLis
         if (message.isSent) {
             sentMessageTextView.text = message.text
             sentMessageTextView.visibility = View.VISIBLE
-            receivedMessageTextView.visibility = View.GONE
+            receivedMessageTextView.visibility = View.INVISIBLE
         } else {
             receivedMessageTextView.text = message.text
             receivedMessageTextView.visibility = View.VISIBLE
-            sentMessageTextView.visibility = View.GONE
+            sentMessageTextView.visibility = View.INVISIBLE
         }
-
         return view
     }
 }

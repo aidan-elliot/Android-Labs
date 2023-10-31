@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="text"
-            android:text="@string/enterText" />
+            android:hint="@string/enterText" />
 
         <Button
             android:id="@+id/receiveButton"

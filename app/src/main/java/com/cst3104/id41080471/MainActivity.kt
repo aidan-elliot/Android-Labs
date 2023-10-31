@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     messages.removeAt(position)
                     adapter.notifyDataSetChanged()
                 }
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("Go back", null)
                 .show()
             true
         }
