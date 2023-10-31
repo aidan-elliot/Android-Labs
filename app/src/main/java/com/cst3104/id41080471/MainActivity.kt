@@ -33,9 +33,9 @@ class MainActivity : AppCompatActivity() {
 
         listView.setOnItemLongClickListener { parent: AdapterView<*>, view: View, position: Int, id: Long ->
             AlertDialog.Builder(this)
-                .setTitle("Do you want to delete this?")
-                .setMessage("The selected row is: $position")
-                .setPositiveButton("Delete") { _, _ ->
+                .setTitle(getString(R.string.deleteMessage))
+                .setMessage(getString(R.string.rowMessage) + " $position")
+                .setPositiveButton(getString(R.string.deleteButton)) { _, _ ->
                     messages.removeAt(position)
                     adapter.notifyDataSetChanged()
                 }
