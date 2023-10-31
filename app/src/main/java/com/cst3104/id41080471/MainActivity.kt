@@ -1,42 +1,55 @@
 package com.cst3104.id41080471
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.CompoundButton
-import android.widget.Switch
-import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
+import android.widget.AdapterView
+import android.widget.EditText
+import android.widget.ListView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var editText: EditText
+    private lateinit var adapter: ChatAdapter
+    private val messages = mutableListOf<Message>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_linear)
 
-        val toastmessage = findViewById<Button>(R.id.button3)
-        toastmessage.setOnClickListener {
-            Toast.makeText(this@MainActivity, R.string.toast_message, Toast.LENGTH_LONG)
+        editText = findViewById(R.id.editTextText)
+        val listView: ListView = findViewById(R.id.listView)
+        adapter = ChatAdapter(this, messages)
+        listView.adapter = adapter
+
+        findViewById<View>(R.id.sendButton).setOnClickListener {
+            addMessage(editText.text.toString(), true)
+        }
+
+        findViewById<View>(R.id.receiveButton).setOnClickListener {
+            addMessage(editText.text.toString(), false)
+        }
+
+        listView.setOnItemLongClickListener { parent: AdapterView<*>, view: View, position: Int, id: Long ->
+            AlertDialog.Builder(this)
+                .setTitle("Do you want to delete this?")
+                .setMessage("The selected row is: $position")
+                .setPositiveButton("Delete") { _, _ ->
+                    messages.removeAt(position)
+                    adapter.notifyDataSetChanged()
+                }
+                .setNegativeButton("Cancel", null)
                 .show()
+            true
         }
-        val switch = findViewById<Switch>(R.id.switch1)
-        switch.setOnCheckedChangeListener { _, isChecked ->
-            val switchState = getString(R.string.switchState)
-            val switchstatus = if (isChecked) getString(R.string.On) else getString(R.string.Off)
-            val message = "$switchState $switchstatus"
-            showSnackbar(message, switch)
-        }
-    }
-    private fun showSnackbar(message: String, switch: Switch) {
-        val snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
-        snackbar.setAction(R.string.undoString) {
-            if (switch.isChecked){
-                switch.isChecked = false
-            } else{
-                switch.isChecked = true
-            }
-        }
-        snackbar.show()
     }
 
+    private fun addMessage(text: String, isSent: Boolean) {
+        if (text.isNotBlank()) {
+            messages.add(Message(text, isSent))
+            editText.text.clear()
+            adapter.notifyDataSetChanged()
+        }
+    }
 }
