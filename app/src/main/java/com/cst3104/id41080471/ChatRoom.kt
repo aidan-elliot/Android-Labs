@@ -1,50 +1,52 @@
 package com.cst3104.id41080471
-import android.widget.TextView
+
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.content.Context
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.cst3104.id41080471.databinding.ActivityChatRoomBinding
 
+class MyAdapter(
+    private val messageList: MutableList<MessageData>,
+    private val context: Context
+) : RecyclerView.Adapter<MyAdapter.MessageViewHolder>() {
 
-class MyViewHolder(val binding: ActivityChatRoomBinding) : RecyclerView.ViewHolder(binding.root) {
-
-}
-class MyAdapter(private val items: List<String>) : RecyclerView.Adapter<MyViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-
-        val binding = ActivityChatRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(R.layout.activity_chat_room, parent, false)
+        return MessageViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyRowHolder, position: Int) {
-        val obj = messages[position]
-        holder.messageText.text = obj
+    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
+        val messageData = messageList[position]
+        holder.timeView.text = messageData.time
+        holder.messageView.text = messageData.message
     }
 
+    override fun getItemCount(): Int = messageList.size
 
-    override fun getItemCount(): Int = items.size
-}
+    inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val timeView: TextView = itemView.findViewById(R.id.time)
+        val messageView: TextView = itemView.findViewById(R.id.message)
 
-class MyRowHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val messageText: TextView = itemView.findViewById(R.id.message)
-    val timeText: TextView = itemView.findViewById(R.id.time)
-    fun MyRowHolder(itemView: View) {
-        super(itemView)
-    }
-}
-class ChatRoom : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityChatRoomBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-
-        val myItems = listOf("Item 1", "Item 2", "Item 3")
-
-
-        binding.recycleView.adapter = MyAdapter(myItems)
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                val listener = View.OnClickListener {
+                    messageList.removeAt(position)
+                    notifyItemRemoved(position)
+                }
+                Snackbar.make(
+                    it,
+                    context.getString(R.string.clickedmessage) + " " + (position + 1),
+                    Snackbar.LENGTH_LONG
+                ).setAction(context.getString(R.string.delete), listener).show()
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
     <string name="app_name">AndroidLab5</string>
     <string name="enterMessage">Type Here</string>
     <string name="sendButton">SEND</string>
-    <string name="receiveButton">RECEIVE</string>
-
+    <string name="messagehint">Enter your message</string>
+    <string name="clickedmessage">You clicked on message</string>
+    <string name="delete">delete</string>
 </resources>

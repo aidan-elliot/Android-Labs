@@ -10,6 +10,4 @@
     <string name="switchText">Interrupteur</string>
     <string name="undoString">Annuler</string>
     <string name="switchState">Le changement est maintenant</string>
-    <string name="On">sur</string>
-    <string name="Off">désactivé</string>
 </resources>
