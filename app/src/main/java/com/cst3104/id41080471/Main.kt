@@ -12,7 +12,7 @@ import java.util.Locale
 
 class Main : AppCompatActivity() {
     companion object {
-        const val DATE_FORMAT = "yyyyMMdd_HHmmss"
+        const val DATE_FORMAT = "HH:mm"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +20,7 @@ class Main : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val sendButton = findViewById<Button>(R.id.sendButton)
+        val receiveButton = findViewById<Button>(R.id.receiveButton)
         val messageInput = findViewById<EditText>(R.id.enterMessage)
         val recyclerView = findViewById<RecyclerView>(R.id.recycleView)
 
@@ -30,13 +31,23 @@ class Main : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         sendButton.setOnClickListener {
-            val messageText = messageInput.text.toString()
-            if (messageText.isNotEmpty()) {
-                val dateAndTime = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date())
-                messages.add(MessageData(messageText, dateAndTime))
-                messageInput.text.clear()
-                adapter.notifyItemInserted(messages.size - 1)
-            }
+            addMessage(messageInput, false, messages, adapter)
+        }
+
+        receiveButton.setOnClickListener {
+            addMessage(messageInput, true, messages, adapter)
+        }
+    }
+
+    private fun addMessage(messageInput: EditText, isReceived: Boolean,
+                           messages: MutableList<MessageData>, adapter: MyAdapter) {
+        val messageText = messageInput.text.toString()
+        if (messageText.isNotEmpty()) {
+            val dateAndTime = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date())
+            messages.add(MessageData(messageText, dateAndTime, isReceived))
+            messageInput.text.clear()
+            adapter.notifyItemInserted(messages.size - 1)
         }
     }
 }
+

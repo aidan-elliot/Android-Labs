@@ -1,10 +1,7 @@
 package com.cst3104.id41080471
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.cst3104.id41080471.databinding.ActivityChatRoomBinding
 import android.view.LayoutInflater
 import android.view.View
 import android.content.Context
@@ -24,16 +21,50 @@ class MyAdapter(
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        val thisRow = messageList[position]
-        holder.timeView.text = thisRow.time
-        holder.messageView.text = thisRow.message
+        val messageData = messageList[position]
+
+        if (messageData.isReceived) {
+            // Show received message views
+            holder.receivedMessageView.visibility = View.VISIBLE
+            holder.receivedTimeView.visibility = View.VISIBLE
+            holder.friendImageView.visibility = View.VISIBLE // Show friend's avatar
+
+            // Hide sent message views
+            holder.sentMessageView.visibility = View.GONE
+            holder.sentTimeView.visibility = View.GONE
+            holder.userImageView.visibility = View.GONE // Hide user's avatar
+
+            // Bind data to received views
+            holder.receivedMessageView.text = messageData.message
+            holder.receivedTimeView.text = messageData.time
+        } else {
+            // Show sent message views
+            holder.sentMessageView.visibility = View.VISIBLE
+            holder.sentTimeView.visibility = View.VISIBLE
+            holder.userImageView.visibility = View.VISIBLE // Show user's avatar
+
+            // Hide received message views
+            holder.receivedMessageView.visibility = View.GONE
+            holder.receivedTimeView.visibility = View.GONE
+            holder.friendImageView.visibility = View.GONE // Hide friend's avatar
+
+            // Bind data to sent views
+            holder.sentMessageView.text = messageData.message
+            holder.sentTimeView.text = messageData.time
+        }
     }
+
 
     override fun getItemCount(): Int = messageList.size
 
     inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val timeView: TextView = itemView.findViewById(R.id.time)
-        val messageView: TextView = itemView.findViewById(R.id.message)
+        val sentMessageView: TextView = itemView.findViewById(R.id.message)
+        val sentTimeView: TextView = itemView.findViewById(R.id.time)
+        val userImageView: ImageView = itemView.findViewById(R.id.userimage)
+
+        val receivedMessageView: TextView = itemView.findViewById(R.id.messagereceived)
+        val receivedTimeView: TextView = itemView.findViewById(R.id.timereceived)
+        val friendImageView: ImageView = itemView.findViewById(R.id.friendimage)
 
         init {
             itemView.setOnClickListener {
@@ -51,3 +82,4 @@ class MyAdapter(
         }
     }
 }
+
