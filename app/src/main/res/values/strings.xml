@@ -5,4 +5,5 @@
     <string name="messagehint">Enter your message</string>
     <string name="clickedmessage">You clicked on message</string>
     <string name="delete">delete</string>
+    <string name="receiveButton">RECEIVE</string>
 </resources>

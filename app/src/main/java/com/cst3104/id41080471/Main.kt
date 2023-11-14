@@ -11,6 +11,10 @@ import java.util.Date
 import java.util.Locale
 
 class Main : AppCompatActivity() {
+    companion object {
+        const val DATE_FORMAT = "yyyyMMdd_HHmmss"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -18,7 +22,8 @@ class Main : AppCompatActivity() {
         val sendButton = findViewById<Button>(R.id.sendButton)
         val messageInput = findViewById<EditText>(R.id.enterMessage)
         val recyclerView = findViewById<RecyclerView>(R.id.recycleView)
-        val messages = ArrayList<MessageData>()
+
+        val messages = mutableListOf<MessageData>()
         val adapter = MyAdapter(messages, applicationContext)
 
         recyclerView.adapter = adapter
@@ -33,8 +38,5 @@ class Main : AppCompatActivity() {
                 adapter.notifyItemInserted(messages.size - 1)
             }
         }
-    }
-    companion object {
-        const val DATE_FORMAT = "yyyyMMdd_HHmm ss"
     }
 }

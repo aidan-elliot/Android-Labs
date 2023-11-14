@@ -1,15 +1,16 @@
 package com.cst3104.id41080471
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.cst3104.id41080471.databinding.ActivityChatRoomBinding
 import android.view.LayoutInflater
 import android.view.View
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.cst3104.id41080471.databinding.ActivityChatRoomBinding
 
 class MyAdapter(
     private val messageList: MutableList<MessageData>,
@@ -18,14 +19,14 @@ class MyAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.activity_chat_room, parent, false)
-        return MessageViewHolder(view)
+        val thisRow = inflater.inflate(R.layout.activity_chat_room, parent, false)
+        return MessageViewHolder(thisRow)
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        val messageData = messageList[position]
-        holder.timeView.text = messageData.time
-        holder.messageView.text = messageData.message
+        val thisRow = messageList[position]
+        holder.timeView.text = thisRow.time
+        holder.messageView.text = thisRow.message
     }
 
     override fun getItemCount(): Int = messageList.size
@@ -42,7 +43,7 @@ class MyAdapter(
                     notifyItemRemoved(position)
                 }
                 Snackbar.make(
-                    it,
+                    itemView,
                     context.getString(R.string.clickedmessage) + " " + (position + 1),
                     Snackbar.LENGTH_LONG
                 ).setAction(context.getString(R.string.delete), listener).show()

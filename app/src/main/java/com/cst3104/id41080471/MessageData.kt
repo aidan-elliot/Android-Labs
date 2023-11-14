@@ -1,3 +1,4 @@
 package com.cst3104.id41080471
 
-class MessageData(var message: String, var time: String)
+data class MessageData(val message: String, val time: String, val isReceived: Boolean)
+
