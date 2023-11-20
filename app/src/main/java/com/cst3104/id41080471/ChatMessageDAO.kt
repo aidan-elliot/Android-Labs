@@ -9,7 +9,7 @@ interface ChatMessageDAO {
     @Insert
     fun insertMessage(messageData: MessageData)
 
-    @Query("SELECT * FROM message_table")
+    @Query("SELECT * FROM messages")
     fun getAllMessages(): List<MessageData>
 
     @Delete
