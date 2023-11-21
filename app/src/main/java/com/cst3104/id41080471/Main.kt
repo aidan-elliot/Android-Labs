@@ -1,5 +1,6 @@
 package com.cst3104.id41080471
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -86,15 +88,31 @@ class Main : AppCompatActivity() {
             init {
                 itemView.setOnClickListener {
                     val position = adapterPosition
-                    val listener = View.OnClickListener {
+                    val messageToDelete = messageList[position]
+
+                    // Create AlertDialog.Builder
+                    val builder = AlertDialog.Builder(context as Activity)
+                    builder.setTitle(R.string.deleteMessage)
+                    builder.setMessage(R.string.Areyousure)
+
+                    // Positive Button ("Yes")
+                    builder.setPositiveButton(R.string.Yes) { _, _ ->
+                        // TODO: Add database delete operation here
                         messageList.removeAt(position)
                         notifyItemRemoved(position)
+                        Snackbar.make(itemView, "Item ${position + 1} has been deleted", Snackbar.LENGTH_LONG)
+                            .setAction(R.string.Undo) {
+                                // Undo the deletion
+                                messageList.add(position, messageToDelete)
+                                notifyItemInserted(position)
+                            }.show()
                     }
-                    Snackbar.make(
-                        itemView,
-                        context.getString(R.string.clickedmessage) + " " + (position + 1),
-                        Snackbar.LENGTH_LONG
-                    ).setAction(context.getString(R.string.delete), listener).show()
+
+                    // Negative Button ("No")
+                    builder.setNegativeButton(R.string.No, null) // No action on clicking "No"
+
+                    // Show the AlertDialog
+                    builder.create().show()
                 }
             }
         }
@@ -115,7 +133,7 @@ class Main : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycleView)
 
         val messages = mutableListOf<MessageData>()
-        val adapter = MyAdapter(messages, applicationContext)
+        val adapter = MyAdapter(messages, this)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
