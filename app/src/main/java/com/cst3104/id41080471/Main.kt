@@ -1,6 +1,5 @@
 package com.cst3104.id41080471
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -14,9 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.room.Room
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,6 +22,7 @@ import com.cst3104.id41080471.databinding.ActivityMainBinding
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 
 
 class Main : AppCompatActivity() {
@@ -137,7 +135,7 @@ class Main : AppCompatActivity() {
         db = Room.databaseBuilder(
             applicationContext,
             MessageDatabase::class.java, "message-database"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
 
         val sendButton = findViewById<Button>(R.id.sendButton)
         val receiveButton = findViewById<Button>(R.id.receiveButton)
@@ -191,7 +189,7 @@ class Main : AppCompatActivity() {
             // Adding the message to the database and the RecyclerView
             val newMessage =
                 MessageData(message = messageText, time = dateAndTime, isReceived = isReceived)
-            GlobalScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.IO) {
                 db.chatMessageDao().insertMessage(newMessage)
                 withContext(Dispatchers.Main) {
                     messages.add(newMessage)

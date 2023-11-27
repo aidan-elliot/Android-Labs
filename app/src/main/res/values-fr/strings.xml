@@ -4,7 +4,7 @@
     <string name="sendButton">ENVOYER</string>
     <string name="messagehint">entrez votre message</string>
     <string name="clickedmessage">Vous avez cliqué sur le message</string>
-    <string name="delete">supprimer</string>
+    <string name="delete">Supprimer</string>
     <string name="receiveButton">RECEVOIR</string>
     <string name="deleteMessage">Supprimer le message</string>
     <string name="Areyousure">Etes-vous sur de vouloir supprimer ce message?</string>
