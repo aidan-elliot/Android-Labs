@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AndroidLab1</string>
+    <string name="sendButton">ENVOYER</string>
+    <string name="messagehint">entrez votre message</string>
+    <string name="clickedmessage">Vous avez cliqué sur le message</string>
+    <string name="delete">supprimer</string>
+    <string name="receiveButton">RECEVOIR</string>
+    <string name="deleteMessage">Supprimer le message</string>
+    <string name="Areyousure">Etes-vous sur de vouloir supprimer ce message?</string>
+    <string name="Yes">Oui</string>
+    <string name="No">Non</string>
+    <string name="Undo">annuler</string>
+</resources>
