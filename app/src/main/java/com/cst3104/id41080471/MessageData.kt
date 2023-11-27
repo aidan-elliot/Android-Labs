@@ -9,6 +9,7 @@ data class MessageData(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "message") val message: String,
     @ColumnInfo(name = "time") val time: String,
-    @ColumnInfo(name = "isReceived") val isReceived: Boolean
+    @ColumnInfo(name = "isReceived") val isReceived: Boolean,
+    var isSelected: Boolean = false
 )
 

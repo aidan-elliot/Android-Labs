@@ -2,6 +2,7 @@ package com.cst3104.id41080471
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,10 +30,12 @@ import android.widget.Toast
 class Main : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: MessageDatabase
+    private lateinit var recyclerView: RecyclerView
 
     companion object {
         const val DATE_FORMAT = "HH:mm"
     }
+
     class MyAdapter(
         private val messageList: MutableList<MessageData>,
         private val context: Context
@@ -61,6 +64,8 @@ class Main : AppCompatActivity() {
                 // Bind data to received views
                 holder.receivedMessageView.text = messageData.message
                 holder.receivedTimeView.text = messageData.time
+                // Set background color based on selection state
+                holder.itemView.setBackgroundColor(if (messageData.isSelected) Color.LTGRAY else Color.TRANSPARENT)
             } else {
                 // Show sent message views
                 holder.sentMessageView.visibility = View.VISIBLE
@@ -75,6 +80,17 @@ class Main : AppCompatActivity() {
                 // Bind data to sent views
                 holder.sentMessageView.text = messageData.message
                 holder.sentTimeView.text = messageData.time
+                // Set background color based on selection state
+                holder.itemView.setBackgroundColor(if (messageData.isSelected) Color.LTGRAY else Color.TRANSPARENT)
+            }
+        }
+        fun deleteSelectedMessage() {
+            val selectedPosition = messageList.indexOfFirst { it.isSelected }
+            if (selectedPosition != -1) {
+                val messageToDelete = messageList[selectedPosition]
+                // Add database delete operation here if necessary
+                messageList.removeAt(selectedPosition)
+                notifyItemRemoved(selectedPosition)
             }
         }
 
@@ -93,32 +109,16 @@ class Main : AppCompatActivity() {
             init {
                 itemView.setOnClickListener {
                     val position = adapterPosition
-                    val messageToDelete = messageList[position]
-
-                    // Create AlertDialog.Builder
-                    val builder = AlertDialog.Builder(context as Activity)
-                    builder.setTitle(R.string.deleteMessage)
-                    builder.setMessage(R.string.Areyousure)
-
-                    // Positive Button ("Yes")
-                    builder.setPositiveButton(R.string.Yes) { _, _ ->
-                        // TODO: Add database delete operation here
-                        messageList.removeAt(position)
-                        notifyItemRemoved(position)
-                        Snackbar.make(itemView, "Item ${position + 1} has been deleted", Snackbar.LENGTH_LONG)
-                            .setAction(R.string.Undo) {
-                                // Undo the deletion
-                                messageList.add(position, messageToDelete)
-                                notifyItemInserted(position)
-                            }.show()
+                    if (position != RecyclerView.NO_POSITION) {
+                        toggleMessageSelection(position)
+                        notifyItemChanged(position) // Notify to redraw this item with the new selection state
                     }
-
-                    // Negative Button ("No")
-                    builder.setNegativeButton(R.string.No, null) // No action on clicking "No"
-
-                    // Show the AlertDialog
-                    builder.create().show()
                 }
+            }
+
+            private fun toggleMessageSelection(position: Int) {
+                val message = messageList[position]
+                message.isSelected = !message.isSelected // Toggle the selection state
             }
         }
     }
@@ -128,6 +128,8 @@ class Main : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        recyclerView = findViewById<RecyclerView>(R.id.recycleView)
+
 
         // Set the toolbar as the app bar
         setSupportActionBar(binding.toolbar)
@@ -161,28 +163,34 @@ class Main : AppCompatActivity() {
         menuInflater.inflate(R.menu.my_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.delete -> {
-                // Implement deletion logic here
+                (recyclerView.adapter as? MyAdapter)?.deleteSelectedMessage()
                 true
             }
+
             R.id.about -> {
                 Toast.makeText(this, R.string.Credit, Toast.LENGTH_SHORT).show()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun addMessage(messageInput: EditText, isReceived: Boolean,
-                           messages: MutableList<MessageData>, adapter: MyAdapter) {
+    private fun addMessage(
+        messageInput: EditText, isReceived: Boolean,
+        messages: MutableList<MessageData>, adapter: MyAdapter
+    ) {
         val messageText = messageInput.text.toString()
         if (messageText.isNotEmpty()) {
             val dateAndTime = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date())
 
             // Adding the message to the database and the RecyclerView
-            val newMessage = MessageData(message = messageText, time = dateAndTime, isReceived = isReceived)
+            val newMessage =
+                MessageData(message = messageText, time = dateAndTime, isReceived = isReceived)
             GlobalScope.launch(Dispatchers.IO) {
                 db.chatMessageDao().insertMessage(newMessage)
                 withContext(Dispatchers.Main) {
@@ -194,4 +202,5 @@ class Main : AppCompatActivity() {
         }
     }
 }
+
 
