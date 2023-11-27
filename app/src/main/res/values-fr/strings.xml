@@ -11,4 +11,6 @@
     <string name="Yes">Oui</string>
     <string name="No">Non</string>
     <string name="Undo">annuler</string>
+    <string name="Credit">Version 1.0 créée par Aidan Elliot</string>
+    <string name="about">À propos</string>
 </resources>
