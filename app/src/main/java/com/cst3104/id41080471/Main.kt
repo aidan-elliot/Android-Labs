@@ -168,7 +168,7 @@ class Main : AppCompatActivity() {
                 true
             }
             R.id.about -> {
-                Toast.makeText(this, "Version 1.0 created by [YourName]", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.Credit, Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
