@@ -20,9 +20,14 @@ import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.cst3104.id41080471.databinding.ActivityMainBinding
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 
 
 class Main : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private lateinit var db: MessageDatabase
 
     companion object {
@@ -121,6 +126,29 @@ class Main : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Set the toolbar as the app bar
+        setSupportActionBar(binding.toolbar)
+
+        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+            menuInflater.inflate(R.menu.my_menu, menu)
+            return true
+        }
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            return when (item.itemId) {
+                R.id.item_1 -> {
+                    // Implement deletion logic here
+                    true
+                }
+                R.id.item_2 -> {
+                    Toast.makeText(this, "Version 1.0 created by [YourName]", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
+        }
 
         db = Room.databaseBuilder(
             applicationContext,
@@ -166,5 +194,4 @@ class Main : AppCompatActivity() {
         }
     }
 }
-
 
