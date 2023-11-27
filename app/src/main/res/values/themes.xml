@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.AndroidLab1" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <!-- You can still customize your theme as needed. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.AndroidLab1" parent="Base.Theme.AndroidLab1" />
