@@ -17,10 +17,6 @@ class ChatRoom : AppCompatActivity() {
 
         // Initialize the database asynchronously
         lifecycleScope.launch(Dispatchers.IO) {
-            db = Room.databaseBuilder(
-                applicationContext,
-                MessageDatabase::class.java, "message-database"
-            ).build()
         }
     }
 

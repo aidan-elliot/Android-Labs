@@ -36,7 +36,8 @@ class Main : AppCompatActivity() {
 
     class MyAdapter(
         private val messageList: MutableList<MessageData>,
-        private val context: Context
+        private val context: Context,
+        private val deleteMessageFromDb: (MessageData) -> Unit
     ) : RecyclerView.Adapter<MyAdapter.MessageViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -78,20 +79,20 @@ class Main : AppCompatActivity() {
                 // Bind data to sent views
                 holder.sentMessageView.text = messageData.message
                 holder.sentTimeView.text = messageData.time
-                // Set background color based on selection state
+                // Sets background color based on selection state
                 holder.itemView.setBackgroundColor(if (messageData.isSelected) Color.LTGRAY else Color.TRANSPARENT)
             }
         }
+
         fun deleteSelectedMessage() {
             val selectedPosition = messageList.indexOfFirst { it.isSelected }
             if (selectedPosition != -1) {
                 val messageToDelete = messageList[selectedPosition]
-                // Add database delete operation here if necessary
+                deleteMessageFromDb(messageToDelete)
                 messageList.removeAt(selectedPosition)
                 notifyItemRemoved(selectedPosition)
             }
         }
-
 
         override fun getItemCount(): Int = messageList.size
 
@@ -109,14 +110,14 @@ class Main : AppCompatActivity() {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         toggleMessageSelection(position)
-                        notifyItemChanged(position) // Notify to redraw this item with the new selection state
+                        notifyItemChanged(position)
                     }
                 }
             }
 
             private fun toggleMessageSelection(position: Int) {
                 val message = messageList[position]
-                message.isSelected = !message.isSelected // Toggle the selection state
+                message.isSelected = !message.isSelected // Toggles the selection state
             }
         }
     }
@@ -143,7 +144,12 @@ class Main : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycleView)
 
         val messages = mutableListOf<MessageData>()
-        val adapter = MyAdapter(messages, this)
+        val adapter = MyAdapter(messages, this) { messageToDelete ->
+            lifecycleScope.launch {
+                // Perform database deletion in the background
+                db.chatMessageDao().deleteMessage(messageToDelete)
+            }
+        }
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
