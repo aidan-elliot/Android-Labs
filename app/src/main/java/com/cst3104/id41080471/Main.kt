@@ -132,24 +132,6 @@ class Main : AppCompatActivity() {
         // Set the toolbar as the app bar
         setSupportActionBar(binding.toolbar)
 
-        override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.my_menu, menu)
-            return true
-        }
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            return when (item.itemId) {
-                R.id.item_1 -> {
-                    // Implement deletion logic here
-                    true
-                }
-                R.id.item_2 -> {
-                    Toast.makeText(this, "Version 1.0 created by [YourName]", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
-        }
-
         db = Room.databaseBuilder(
             applicationContext,
             MessageDatabase::class.java, "message-database"
@@ -172,6 +154,24 @@ class Main : AppCompatActivity() {
 
         receiveButton.setOnClickListener {
             addMessage(messageInput, true, messages, adapter)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.my_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete -> {
+                // Implement deletion logic here
+                true
+            }
+            R.id.about -> {
+                Toast.makeText(this, "Version 1.0 created by [YourName]", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
