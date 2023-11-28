@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidLab5</string>
+    <string name="app_name">Lab8 Toolbar</string>
     <string name="sendButton">SEND</string>
     <string name="messagehint">Enter your message</string>
     <string name="clickedmessage">You clicked on message</string>

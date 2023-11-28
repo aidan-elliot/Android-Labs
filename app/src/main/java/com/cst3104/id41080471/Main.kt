@@ -36,9 +36,13 @@ class Main : AppCompatActivity() {
 
     class MyAdapter(
         private val messageList: MutableList<MessageData>,
-        private val context: Context,
-        private val deleteMessageFromDb: (MessageData) -> Unit
+        private val context: Context
     ) : RecyclerView.Adapter<MyAdapter.MessageViewHolder>() {
+        private lateinit var deleteMessageFromDb: (MessageData, Int) -> Unit
+
+        fun setDeleteMessageLambda(lambda: (MessageData, Int) -> Unit) {
+            deleteMessageFromDb = lambda
+        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
             val inflater = LayoutInflater.from(parent.context)
@@ -83,17 +87,13 @@ class Main : AppCompatActivity() {
                 holder.itemView.setBackgroundColor(if (messageData.isSelected) Color.LTGRAY else Color.TRANSPARENT)
             }
         }
-
         fun deleteSelectedMessage() {
             val selectedPosition = messageList.indexOfFirst { it.isSelected }
             if (selectedPosition != -1) {
                 val messageToDelete = messageList[selectedPosition]
-                deleteMessageFromDb(messageToDelete)
-                messageList.removeAt(selectedPosition)
-                notifyItemRemoved(selectedPosition)
+                deleteMessageFromDb(messageToDelete, selectedPosition)
             }
         }
-
         override fun getItemCount(): Int = messageList.size
 
         inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -127,10 +127,7 @@ class Main : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        recyclerView = findViewById<RecyclerView>(R.id.recycleView)
 
-
-        // Set the toolbar as the app bar
         setSupportActionBar(binding.toolbar)
 
         db = Room.databaseBuilder(
@@ -138,27 +135,41 @@ class Main : AppCompatActivity() {
             MessageDatabase::class.java, "message-database"
         ).fallbackToDestructiveMigration().build()
 
+        recyclerView = findViewById<RecyclerView>(R.id.recycleView)
         val sendButton = findViewById<Button>(R.id.sendButton)
         val receiveButton = findViewById<Button>(R.id.receiveButton)
         val messageInput = findViewById<EditText>(R.id.enterMessage)
-        val recyclerView = findViewById<RecyclerView>(R.id.recycleView)
-
         val messages = mutableListOf<MessageData>()
-        val adapter = MyAdapter(messages, this) { messageToDelete ->
-            lifecycleScope.launch {
-                // Perform database deletion in the background
+        val adapter = MyAdapter(messages, this)
+        val deleteMessage: (MessageData, Int) -> Unit = { messageToDelete, position ->
+            lifecycleScope.launch(Dispatchers.IO) {
                 db.chatMessageDao().deleteMessage(messageToDelete)
+                withContext(Dispatchers.Main) {
+                    messages.removeAt(position)
+                    adapter.notifyItemRemoved(position)
+                }
             }
         }
+        adapter.setDeleteMessageLambda(deleteMessage)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        // Fetch existing messages from the database and update the RecyclerView
+        lifecycleScope.launch(Dispatchers.IO) {
+            val existingMessages = db.chatMessageDao().getAllMessages()
+            withContext(Dispatchers.Main) {
+                messages.addAll(existingMessages)
+                adapter.notifyDataSetChanged()
+            }
+        }
         sendButton.setOnClickListener {
+            // 'false' for isReceived, indicating a sent message
             addMessage(messageInput, false, messages, adapter)
         }
 
         receiveButton.setOnClickListener {
+            // 'true' for isReceived, indicating a received message
             addMessage(messageInput, true, messages, adapter)
         }
     }
@@ -183,12 +194,11 @@ class Main : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
     private fun addMessage(
         messageInput: EditText, isReceived: Boolean,
         messages: MutableList<MessageData>, adapter: MyAdapter
     ) {
-        val messageText = messageInput.text.toString()
+        val messageText = messageInput.text.toString().trim()
         if (messageText.isNotEmpty()) {
             val dateAndTime = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date())
 
